@@ -1,9 +1,9 @@
 <template>
   <div class="home">
     <h1>{{ title }}</h1>
-    <router-link class="menu-option" to="/players">Start a new game</router-link>
-    <router-link class="menu-option" to="/setup">Setup game</router-link>
-    <router-link class="menu-option" to="/game">Start game</router-link>
+    <router-link class="menu-option" to="/players">Add players</router-link>
+    <router-link class="menu-option" v-bind:class="{'disabled': !playersAdded}" to="/setup">Setup game</router-link>
+    <router-link class="menu-option" v-bind:class="{'disabled': !playersAdded || !gameSetup}" to="/game">Start game</router-link>
   </div>
 </template>
 
@@ -13,6 +13,8 @@ export default {
   data() {
     return {
       title: 'Pocha',
+      playersAdded: this.$store.state.playersAdded,
+      gameSetup: this.$store.state.gameSetup
     };
   },
 };
@@ -34,6 +36,11 @@ export default {
   height: 20px;
   padding: 10px;
   text-decoration: none;
+}
+
+.menu-option.disabled {
+  background-color: grey;
+  pointer-events: none;
 }
 
 @media(min-width: 768px) {

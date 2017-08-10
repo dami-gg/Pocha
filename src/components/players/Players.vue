@@ -12,6 +12,8 @@
         <button v-on:click="removePlayer(player)">-</button>
       </li>
     </ul>
+    <button v-on:click="savePlayers()">Save players</button>
+    <button v-on:click="clearPlayers()">Cancel changes</button>
   </div>
 </template>
 
@@ -22,28 +24,35 @@ export default {
     return {
       title: 'Add new players',
       subtitle: 'Players:',
-      players: [],
+      players: this.$store.state.players,
       newPlayerName: ''
     };
   },
   methods: {
     addPlayer() {
-      this.players.push({ name: this.newPlayerName });
+      this.$store.commit('addPlayer', this.newPlayerName);
       this.newPlayerName = '';
     },
     removePlayer(deletedPlayer) {
-      const playerIndex = this.players.findIndex(player => player.name === deletedPlayer.name);
-
-      if (playerIndex !== -1) {
-        this.players = this.players.splice(playerIndex, 1);
-      }
+      this.$store.commit('removePlayer', deletedPlayer);
+    },
+    savePlayers() {
+      this.$store.commit('savePlayers');
+      this.redirectHome();
+    },
+    clearPlayers() {
+      this.$store.commit('clearPlayers');
+      this.redirectHome();
+    },
+    redirectHome() {
+      this.$router.push('/');
     }
   }
 };
 </script>
 
 <style scoped>
-  .players-list {
-    list-style: none;
-  }
+.players-list {
+  list-style: none;
+}
 </style>
