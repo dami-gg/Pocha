@@ -8,7 +8,13 @@ export default new Vuex.Store({
     players: [],
     playersAdded: false,
     setup: {},
-    gameSetup: false
+    gameSetup: true, // TODO
+    upAndDown: true, // TODO
+    eachPlayerDealsFirstRound: true, // TODO
+    dealer: undefined,
+    currentRound: 0,
+    totalRounds: undefined,
+    rounds: {}
   },
   mutations: {
     addPlayer(state, playerName) {
@@ -28,6 +34,9 @@ export default new Vuex.Store({
     clearPlayers(state) {
       state.playersAdded = false;
       state.players = [];
+    },
+    addRoundBets(state, roundBets) {
+      state.rounds.push(roundBets);
     }
   }
 });

@@ -1,17 +1,17 @@
 <template>
-    <div class="setup">
-    
-    </div>
+  <div class="setup">
+  
+  </div>
 </template>
 
 <script>
 export default {
-    name: 'setup',
-    data() {
-        return {
-            
-        }
+  name: 'setup',
+  data() {
+    return {
+
     }
+  }
 }
 </script>
 

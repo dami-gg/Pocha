@@ -3,7 +3,7 @@
     <h1>{{ title }}</h1>
     <form>
       <input id="playerForm" v-model="newPlayerName" placeholder="Player name">
-      <button v-on:click="addPlayer">Add player</button>
+      <button v-on:click="addPlayer($event)">Add player</button>
     </form>
     <h3>{{ subtitle }}</h3>
     <ul class="players-list">
@@ -12,14 +12,19 @@
         <button v-on:click="removePlayer(player)">-</button>
       </li>
     </ul>
-    <button v-on:click="savePlayers()">Save players</button>
-    <button v-on:click="clearPlayers()">Cancel changes</button>
+    <action-buttons :onConfirm="savePlayers" :onCancel="clearPlayers" :confirmLabel="'Save players'" :cancelLabel="'Cancel changes'">
+    </action-buttons>
   </div>
 </template>
 
 <script>
+import ActionButtons from '../common/ActionButtons';
+
 export default {
   name: 'players',
+  components: {
+    ActionButtons
+  },
   data() {
     return {
       title: 'Add new players',
@@ -29,7 +34,8 @@ export default {
     };
   },
   methods: {
-    addPlayer() {
+    addPlayer(event) {
+      event.preventDefault();
       this.$store.commit('addPlayer', this.newPlayerName);
       this.newPlayerName = '';
     },
