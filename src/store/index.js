@@ -1,5 +1,7 @@
-import Vue from 'vue';
+import Vue from "vue";
 import Vuex from "vuex";
+
+import { calculateTotalRounds } from "../helpers";
 
 Vue.use(Vuex);
 
@@ -12,31 +14,46 @@ export default new Vuex.Store({
     upAndDown: true, // TODO
     eachPlayerDealsFirstRound: true, // TODO
     dealer: undefined,
-    currentRound: 0,
-    totalRounds: undefined,
-    rounds: {}
+    currentRound: 1,
+    totalRounds: 0,
+    rounds: []
   },
   mutations: {
     addPlayer(state, playerName) {
-      state.players.push({id: state.players.length, name: playerName});
+      state.players.push({ id: state.players.length, name: playerName });
     },
     removePlayer(state, playerRemoved) {
       // Vue only supports some array mutation methods so filter does not work (https://vuejs.org/v2/guide/list.html#Mutation-Methods)
-      const playerIndex = state.players.findIndex(player => player.name === playerRemoved.name);
+      const playerIndex = state.players.findIndex(
+        player => player.name === playerRemoved.name
+      );
 
       if (playerIndex !== -1) {
         state.players = state.players.splice(playerIndex, 1);
       }
     },
     savePlayers(state) {
-      state.playersAdded = true;
+      const numPlayers = state.players.length;
+
+      // TODO numPlayers should be between 3 and 6
+      if (numPlayers) {
+        state.playersAdded = true;
+        state.totalRounds = calculateTotalRounds(numPlayers);
+      }
     },
     clearPlayers(state) {
       state.playersAdded = false;
       state.players = [];
     },
-    addRoundBets(state, roundBets) {
-      state.rounds.push(roundBets);
+    addRoundBets(state, round) {
+      state.rounds.push(round);
+    },
+    addRoundScores(state, round) {
+      state.rounds.pop();
+      state.rounds.push(round);
+    },
+    goToNextRound(state) {
+      state.currentRound++; // TODO Check going down or several first and last rounds
     }
   }
 });

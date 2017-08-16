@@ -1,7 +1,7 @@
 <template>
   <div class="action-buttons">
-    <button class="action-button action-button--confirm" v-on:click="onConfirm">{{confirmLabel}}</button>
-    <button class="action-button action-button--cancel" v-on:click="onCancel">{{cancelLabel}}</button>
+    <button class="action-button action-button--confirm" v-on:click="onConfirm" :class="{'disabled': confirmDisabled}">{{confirmLabel}}</button>
+    <button class="action-button action-button--cancel" v-on:click="onCancel" :class="{'disabled': cancelDisabled}">{{cancelLabel}}</button>
   </div>
 </template>
 
@@ -24,6 +24,14 @@ export default {
     cancelLabel: {
       type: String,
       required: true
+    },
+    confirmDisabled: {
+      type: Boolean,
+      required: false
+    },
+    cancelDisabled: {
+      type: Boolean,
+      required: false
     }
   }
 }
@@ -32,11 +40,11 @@ export default {
 <style scoped>
 .action-buttons {
   display: flex;
-  flex-direction: column;  
+  flex-direction: column;
 }
 
 .action-button {
-  margin: 10px auto;  
+  margin: 10px auto;
   color: white;
   font-weight: 600;
   border: 1px solid black;
@@ -57,5 +65,10 @@ export default {
 
 .action-button--cancel {
   background-color: red;
+}
+
+.action-button.disabled {
+  background-color: grey;
+  pointer-events: none;
 }
 </style>

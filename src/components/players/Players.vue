@@ -12,8 +12,7 @@
         <button v-on:click="removePlayer(player)">-</button>
       </li>
     </ul>
-    <action-buttons :onConfirm="savePlayers" :onCancel="clearPlayers" :confirmLabel="'Save players'" :cancelLabel="'Cancel changes'">
-    </action-buttons>
+    <action-buttons :onConfirm="savePlayers" :onCancel="clearPlayers" :confirmLabel="'Save players'" :cancelLabel="'Cancel changes'"></action-buttons>
   </div>
 </template>
 
@@ -43,6 +42,7 @@ export default {
       this.$store.commit('removePlayer', deletedPlayer);
     },
     savePlayers() {
+      // TODO Take minimum number of players into consideration
       this.$store.commit('savePlayers');
       this.redirectHome();
     },

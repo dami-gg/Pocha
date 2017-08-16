@@ -5,8 +5,7 @@ import Home from '@/components/home/Home';
 import Players from '@/components/players/Players';
 import Setup from '@/components/setup/Setup';
 import Game from '@/components/game/Game';
-import Bets from '@/components/round/Bets';
-import Scores from '@/components/round/Scores';
+import Round from '@/components/round/Round';
 
 Vue.use(Router);
 
@@ -33,16 +32,10 @@ export default new Router({
       component: Game
     },
     {
-      path: '/round/:round/bet',
+      path: '/round/:number/type',
       props: true,
-      name: 'bets',
-      component: Bets
-    },
-    {
-      path: '/round/:round/scores',
-      props: true,
-      name: 'scores',
-      component: Scores
+      name: 'round',
+      component: Round
     }
   ],
 });
