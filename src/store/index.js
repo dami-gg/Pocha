@@ -10,9 +10,9 @@ export default new Vuex.Store({
     players: [],
     playersAdded: false,
     setup: {},
-    gameSetup: true, // TODO
-    upAndDown: true, // TODO
-    eachPlayerDealsFirstRound: true, // TODO
+    gameSetup: false, 
+    upAndDown: true,
+    allDealOneCard: false, 
     dealer: undefined,
     currentRound: 1,
     totalRounds: 0,
@@ -54,6 +54,12 @@ export default new Vuex.Store({
     },
     goToNextRound(state) {
       state.currentRound++; // TODO Check going down or several first and last rounds
+    },
+    setupGame(state, configuration) {
+      state.dealer = configuration.dealer;
+      state.upAndDown = configuration.upAndDown;
+      state.allDealOneCard = configuration.allDealOneCard;
+      state.gameSetup = true;
     }
   }
 });
