@@ -1,8 +1,8 @@
 <template>
-    <div class="ranking">
+    <div class="page page--ranking">
         <h1>Current ranking</h1>
         <ul>
-            <li v-for="player in ranking">{{player.name}}</li>
+            <li v-for="player in ranking" v-bind:key="player.id">{{player.name}}</li>
         </ul>
     </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div class="game">
+  <div class="page page--game">
     <h1>Current round: {{this.currentRound}} {{this.currentRound === 1 ? 'card is' : 'cards are'}} dealt</h1>
     <div class="menu">
       <menu-option :path="'round'" :params="{number: this.currentRound, type: ROUND_TYPE_BET}" :label="'Add bets'" :class="{'disabled': isRoundBet}"></menu-option>

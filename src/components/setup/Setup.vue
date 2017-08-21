@@ -1,5 +1,5 @@
 <template>
-  <div class="setup">
+  <div class="page page--setup">
     <h1>Setup game</h1>
     <div class="option">
       <label for="dealer-dropdown">Choose the initial dealer:</label>

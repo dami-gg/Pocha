@@ -1,15 +1,15 @@
 <template>
-  <div class="players">
+  <div class="page page--players">
     <h1>{{ title }}</h1>
-    <form>
-      <input id="playerForm" v-model="newPlayerName" placeholder="Player name">
-      <button v-on:click="addPlayer($event)">Add player</button>
-    </form>
-    <h3>{{ subtitle }}</h3>
-    <ul class="players-list">
-      <li v-for="player in players" v-bind:key="player.id">
-        {{ player.name }}
-        <button v-on:click="removePlayer(player)">-</button>
+    <div class="new-player">
+      <input class="new-player__input" id="playerForm" v-model="newPlayerName" placeholder="Player name">
+      <button class="new-player__button" v-on:click="addPlayer($event)">Add player</button>
+    </div>
+    <h2>{{ subtitle }}</h2>
+    <ul class="players">
+      <li v-for="player in players" v-bind:key="player.id" class="players__player">
+        <div class="players__player__name"><span>{{ player.name }}</span></div>
+        <button v-on:click="removePlayer(player)" class="players__player__remove">-</button>
       </li>
     </ul>
     <action-buttons :onConfirm="savePlayers" :onCancel="clearPlayers" :confirmLabel="'Save players'" :cancelLabel="'Cancel changes'"></action-buttons>
@@ -58,7 +58,50 @@ export default {
 </script>
 
 <style scoped>
-.players-list {
+.new-player {
+  height: 50px;
+  display: flex;
+}
+
+.new-player__input {
+  width: 60%;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.new-player__button {
+  width: 40%;
+  background-color: blue;
+  color: white;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.players {
+  display: flex;
+  flex-direction: column;
   list-style: none;
+}
+
+.players__player {
+  margin: 10px 0;
+  display: flex;
+  flex-direction: row;
+}
+
+.players__player__name {
+  width: 49%;
+  margin-right: 1%;
+  text-align: right;
+  font-size: 18px;
+}
+
+.players__payer__remove {
+  width: 49%;
+  margin-left: 1%;
+  cursor: pointer;
 }
 </style>

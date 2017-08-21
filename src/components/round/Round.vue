@@ -1,12 +1,13 @@
 <template>
   <div class="round">
-    <div class="players">
-      <div class="player" v-for="playerBet in this.roundBets" v-bind:key="playerBet.player.id">
-        <div>{{playerBet.player.name}}</div>
-        <div class="bet">
+    <h1>Bets for round: {{number}}</h1>
+    <div class="round__players">
+      <div class="round__players__player" v-for="playerBet in this.roundBets" v-bind:key="playerBet.player.id">
+        <div class="round__players__player__name">{{playerBet.player.name}}</div>
+        <div class="round__players__player__bet">
           <input v-model="playerBet.bet" v-bind:class="{'readonly': type === ROUND_TYPE_SCORE}">
         </div>
-        <div class="score" v-show="type === ROUND_TYPE_SCORE">
+        <div class="round__players__player__score" v-show="type === ROUND_TYPE_SCORE">
           <input v-model="playerBet.score">
         </div>
       </div>
@@ -66,5 +67,10 @@ export default {
 </script>
 
 <style scope>
-
+.round__players__player {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 10px auto;
+}
 </style>

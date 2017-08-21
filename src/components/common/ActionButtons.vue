@@ -44,19 +44,15 @@ export default {
 }
 
 .action-button {
-  margin: 10px auto;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
   color: white;
   font-weight: 600;
   border: 1px solid black;
   padding: 10px;
   font-size: 16px;
   cursor: pointer;
-}
-
-@media(min-width: 768px) {
-  .action-button {
-    margin: 10px 40%;
-  }
 }
 
 .action-button--confirm {
