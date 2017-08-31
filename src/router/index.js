@@ -6,6 +6,7 @@ import Players from '@/components/players/Players';
 import Setup from '@/components/setup/Setup';
 import Game from '@/components/game/Game';
 import Round from '@/components/round/Round';
+import Ranking from '@/components/ranking/Ranking';
 
 Vue.use(Router);
 
@@ -32,10 +33,15 @@ export default new Router({
       component: Game
     },
     {
-      path: '/round/:number/type',
+      path: '/round/:numCards/:type',
       props: true,
       name: 'round',
       component: Round
+    },
+    {
+      path: '/ranking',
+      name: 'ranking',
+      component: Ranking
     }
   ],
 });

@@ -59,8 +59,9 @@ export default {
 
 <style scoped>
 .new-player {
-  height: 50px;
   display: flex;
+  width: 100%;
+  height: 50px;
 }
 
 .new-player__input {
@@ -82,6 +83,7 @@ export default {
 
 .players {
   display: flex;
+  width: 100%;
   flex-direction: column;
   list-style: none;
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="action-buttons">
-    <button class="action-button action-button--confirm" v-on:click="onConfirm" :class="{'disabled': confirmDisabled}">{{confirmLabel}}</button>
-    <button class="action-button action-button--cancel" v-on:click="onCancel" :class="{'disabled': cancelDisabled}">{{cancelLabel}}</button>
+    <button v-show="onConfirm" class="action-button action-button--confirm" v-on:click="onConfirm" :class="{'disabled': confirmDisabled}">{{confirmLabel}}</button>
+    <button v-show="onCancel" class="action-button action-button--cancel" v-on:click="onCancel" :class="{'disabled': cancelDisabled}">{{cancelLabel}}</button>
   </div>
 </template>
 

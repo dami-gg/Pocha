@@ -21,11 +21,18 @@ export default {
 }
 
 .page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 0 4%;  
   margin-top: 2%;
 }
 
 h1 {
   font-size: 2.4rem;
+}
+
+.action-buttons {
+  width: 100%;
 }
 </style>

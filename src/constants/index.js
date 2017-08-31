@@ -9,3 +9,6 @@ export const MAX_PLAYERS = 6;
 
 export const ROUND_TYPE_BET = 'bet';
 export const ROUND_TYPE_SCORE = 'score';
+
+export const SCORE_FOR_RIGHT_BET = 5;
+export const POINT_VALUE = 3;

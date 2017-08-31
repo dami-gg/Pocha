@@ -4,7 +4,7 @@
     <div class="option">
       <label for="dealer-dropdown">Choose the initial dealer:</label>
       <select id="dealer-dropdown" v-model="configuration.dealer">
-        <option v-for="player in players" v-bind:key="player.id" v-bind:value="player.id">{{player.name}}</option>
+        <option v-for="player in players" v-bind:key="player.id" v-bind:value="player">{{player.name}}</option>
       </select>
     </div>
     <div class="option">

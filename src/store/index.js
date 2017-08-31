@@ -10,18 +10,24 @@ export default new Vuex.Store({
     players: [],
     playersAdded: false,
     setup: {},
-    gameSetup: false, 
+    gameSetup: false,
     upAndDown: true,
-    allDealOneCard: false, 
+    allDealOneCard: false,
     dealer: undefined,
     currentRound: 1,
+    numCards: 1,
     totalRounds: 0,
     rounds: []
   },
   mutations: {
     addPlayer(state, playerName) {
-      state.players.push({ id: state.players.length, name: playerName });
+      state.players.push({
+        id: state.players.length,
+        name: playerName,
+        accumulatedScore: 0
+      });
     },
+    
     removePlayer(state, playerRemoved) {
       // Vue only supports some array mutation methods so filter does not work (https://vuejs.org/v2/guide/list.html#Mutation-Methods)
       const playerIndex = state.players.findIndex(
@@ -32,6 +38,7 @@ export default new Vuex.Store({
         state.players = state.players.splice(playerIndex, 1);
       }
     },
+
     savePlayers(state) {
       const numPlayers = state.players.length;
 
@@ -41,20 +48,36 @@ export default new Vuex.Store({
         state.totalRounds = calculateTotalRounds(numPlayers);
       }
     },
+
     clearPlayers(state) {
       state.playersAdded = false;
       state.players = [];
     },
+
     addRoundBets(state, round) {
       state.rounds.push(round);
     },
+
     addRoundScores(state, round) {
+      let playerIndex;
+
+      round.players.forEach(playerRound => {
+        playerIndex = state.players.findIndex(
+          player => player.id === playerRound.id
+        );
+        state.players[playerIndex].accumulatedScore =
+          playerRound.accumulatedScore;
+      });
+
       state.rounds.pop();
       state.rounds.push(round);
     },
+
     goToNextRound(state) {
-      state.currentRound++; // TODO Check going down or several first and last rounds
+      state.currentRound++;
+      state.numCards++; // TODO Check going down or several first and last rounds
     },
+
     setupGame(state, configuration) {
       state.dealer = configuration.dealer;
       state.upAndDown = configuration.upAndDown;
