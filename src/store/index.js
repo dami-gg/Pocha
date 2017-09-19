@@ -1,11 +1,13 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import createPersistedState from 'vuex-persistedstate'
 
 import { calculateTotalRounds } from "../helpers";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  plugins: [createPersistedState()],
   state: {
     players: [],
     playersAdded: false,
