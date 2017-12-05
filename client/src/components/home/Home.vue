@@ -1,28 +1,26 @@
 <template>
   <div class="home">
     <h1>{{ title }}</h1>
-    <router-link class="menu-option" to="players">
-      <span class="menu-option__text">Add players</span>
+    <router-link class="menu-option" to="/new-game">
+      <span class="menu-option__text">New game</span>
     </router-link>
-    <router-link class="menu-option" v-bind:class="{'disabled': !playersAdded}" to="/setup">
-      <span class="menu-option__text">Setup game</span>
-    </router-link>
-    <router-link class="menu-option" v-bind:class="{'disabled': !playersAdded || !gameSetup}" to="/game">
-      <span class="menu-option__text">Start game</span>
-    </router-link>
+    <game-list></game-list>
   </div>
 </template>
 
 <script>
+import GameList from "../game-list/GameList";
+
 export default {
-  name: 'home',
+  name: "home",
+  components: {
+    GameList
+  },
   data() {
     return {
-      title: 'Pocha',
-      playersAdded: this.$store.state.playersAdded,
-      gameSetup: this.$store.state.gameSetup
+      title: "Pocha"
     };
-  },
+  }
 };
 </script>
 

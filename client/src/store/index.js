@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import createPersistedState from 'vuex-persistedstate'
+import createPersistedState from "vuex-persistedstate";
 
 import { calculateTotalRounds } from "../helpers";
 
@@ -22,18 +22,14 @@ export default new Vuex.Store({
     rounds: []
   },
   mutations: {
-    addPlayer(state, playerName) {
-      state.players.push({
-        id: state.players.length,
-        name: playerName,
-        accumulatedScore: 0
-      });
+    addPlayer(state, player) {
+      state.players.push(player);
     },
-    
+
     removePlayer(state, playerRemoved) {
       // Vue only supports some array mutation methods so filter does not work (https://vuejs.org/v2/guide/list.html#Mutation-Methods)
       const playerIndex = state.players.findIndex(
-        player => player.name === playerRemoved.name
+        player => player.id === playerRemoved.id
       );
 
       if (playerIndex !== -1) {

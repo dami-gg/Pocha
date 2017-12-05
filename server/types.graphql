@@ -1,0 +1,76 @@
+# The following types define the data model of the example service
+# based on which the GraphQL API is generated
+
+# You can declare relations between models like this
+# posts: [Post!]! @relation(name: "UserPosts")
+
+# Every relation also required a back-relation (to determine 1:1, 1:n or n:m)
+# author: User! @relation(name: "UserPosts")
+
+type Game @model {
+  id: ID! @isUnique
+  createdAt: DateTime! # Automatically managed by Graphcool
+  configuration: GameConfiguration @relation(name: "GameConfiguration")
+  players: [Player!]! @relation(name: "PlayerGames")
+  rounds: [Round!]! @relation(name: "GameRounds")
+  playersScores: [PlayerGameScore!]! @relation(name: "GamePlayersScores")
+}
+
+type GameConfiguration @model {
+  id: ID! @isUnique
+  initialDealer: Player! @relation(name: "GameInitialDealer")
+  allDealOneCard: Boolean @defaultValue(value: false)
+  upAndDown: Boolean @defaultValue(value: true)
+  game: Game! @relation(name: "GameConfiguration")
+}
+
+type Player @model {
+  id: ID! @isUnique
+  name: String!
+  gamesScores: [PlayerGameScore!]! @relation(name: "PlayerScoresInGames")
+  games: [Game!]! @relation(name: "PlayerGames")
+  bets: [Bet!]! @relation(name: "PlayerBets")
+  scores: [Score!]! @relation(name: "PlayerScores")
+  initialDealer: [GameConfiguration!]! @relation(name: "GameInitialDealer")
+}
+
+type PlayerGameScore @model {
+  id: ID! @isUnique
+  accumulatedScore: Int! @defaultValue(value: 0)
+  player: Player! @relation(name: "PlayerScoresInGames")
+  game: Game! @relation(name: "GamePlayersScores")
+}
+
+type Round @model {
+  id: ID! @isUnique
+  # dealer: Player!
+  bets: [Bet!]! @relation(name: "RoundBets")
+  scores: [Score!]! @relation(name: "RoundScores")
+  game: Game! @relation(name: "GameRounds")
+}
+
+type Bet @model {
+  id: ID! @isUnique
+  player: Player! @relation(name: "PlayerBets")
+  bet: Int!
+  round: Round! @relation(name: "RoundBets")
+}
+
+type Score @model {
+  id: ID! @isUnique
+  player: Player! @relation(name: "PlayerScores")
+  score: Int!
+  round: Round! @relation(name: "RoundScores")
+}
+
+# Uncomment the model below as well
+
+# type Post @model {
+#   id: ID! @isUnique
+#   title: String!
+
+#   # Every relation also required a back-relation (to determine 1:1, 1:n or n:m)
+#   author: User! @relation(name: "UserPosts")
+# }
+
+

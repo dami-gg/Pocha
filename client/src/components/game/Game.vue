@@ -32,7 +32,7 @@ export default {
   methods: {
     goToNextRound() {
       this.$store.commit('goToNextRound');
-      this.$router.push('/game');
+      location.reload(); // TODO Find a seamless way to do this without reloading
     },
     abort() {
       this.$router.push('/');

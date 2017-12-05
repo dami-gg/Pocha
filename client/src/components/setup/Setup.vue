@@ -21,10 +21,10 @@
 </template>
 
 <script>
-import ActionButtons from '../common/ActionButtons';
+import ActionButtons from "../common/ActionButtons";
 
 export default {
-  name: 'setup',
+  name: "setup",
   components: {
     ActionButtons
   },
@@ -36,18 +36,18 @@ export default {
         allDealOneCard: false,
         goingUpAndDown: true
       }
-    }
+    };
   },
   methods: {
     save() {
-      this.$store.commit('setupGame', this.configuration);
-      this.redirectHome();
+      this.$store.commit("setupGame", this.configuration);
+      this.redirectToNewGame();
     },
     cancel() {
-      this.redirectHome();
+      this.redirectToNewGame();
     },
-    redirectHome() {
-      this.$router.push('/');
+    redirectToNewGame() {
+      this.$router.push("/new-game");
     }
   },
   computed: {
@@ -55,7 +55,7 @@ export default {
       return !!this.configuration.dealer;
     }
   }
-}
+};
 </script>
 
 <style scoped>
