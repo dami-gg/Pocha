@@ -11,9 +11,8 @@ type Game @model {
   id: ID! @isUnique
   createdAt: DateTime! # Automatically managed by Graphcool
   configuration: GameConfiguration @relation(name: "GameConfiguration")
-  players: [Player!]! @relation(name: "PlayerGames")
+  players: [PlayerGame!]! @relation(name: "GamePlayers")
   rounds: [Round!]! @relation(name: "GameRounds")
-  playersScores: [PlayerGameScore!]! @relation(name: "GamePlayersScores")
 }
 
 type GameConfiguration @model {
@@ -27,17 +26,16 @@ type GameConfiguration @model {
 type Player @model {
   id: ID! @isUnique
   name: String!
-  gamesScores: [PlayerGameScore!]! @relation(name: "PlayerScoresInGames")
-  games: [Game!]! @relation(name: "PlayerGames")
-  initialDealer: [GameConfiguration!]! @relation(name: "GameInitialDealer")
+  games: [PlayerGame!]! @relation(name: "PlayerGames")
   rounds: [PlayerRound!]! @relation(name: "PlayerRounds")
+  initialDealer: [GameConfiguration!]! @relation(name: "GameInitialDealer")
 }
 
-type PlayerGameScore @model {
+type PlayerGame @model {
   id: ID! @isUnique
   accumulatedScore: Int! @defaultValue(value: 0)
-  player: Player! @relation(name: "PlayerScoresInGames")
-  game: Game! @relation(name: "GamePlayersScores")
+  player: Player! @relation(name: "PlayerGames")
+  game: Game! @relation(name: "GamePlayers")
 }
 
 type Round @model {
