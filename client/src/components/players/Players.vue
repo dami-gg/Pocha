@@ -32,7 +32,7 @@
 import ActionButtons from "../common/ActionButtons";
 import {
   ALL_PLAYERS_QUERY,
-  CREATE_PLAYER_MUTATION
+  CREATE_PLAYER
 } from "../../constants/graphql";
 
 export default {
@@ -56,7 +56,7 @@ export default {
 
       this.$apollo
         .mutate({
-          mutation: CREATE_PLAYER_MUTATION,
+          mutation: CREATE_PLAYER,
           variables: {
             name: this.newPlayerName
           }

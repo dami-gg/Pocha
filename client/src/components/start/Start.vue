@@ -7,12 +7,11 @@
     <router-link class="menu-option" v-bind:class="{'disabled': !playersAdded}" to="/setup">
       <span class="menu-option__text">Setup game</span>
     </router-link>
-    <router-link class="menu-option" 
+    <button class="menu-option" 
         v-bind:class="{'disabled': !playersAdded || !gameSetup}" 
-        to="/game" 
-        v-on:click.native="createNewGame()">
+        v-on:click="createNewGame()">
       <span class="menu-option__text">Start game</span>
-    </router-link>
+    </button>
     <router-link class="menu-option negative" to="/">
       <span class="menu-option__text">Back to home</span>
     </router-link>
@@ -21,9 +20,10 @@
 
 <script>
 import {
-  CREATE_GAME_MUTATION,
-  CREATE_GAME_CONFIGURATION_MUTATION,
-  ADD_PLAYER_TO_GAME
+  CREATE_GAME,
+  CREATE_GAME_CONFIGURATION,
+  ADD_PLAYER_TO_GAME,
+  CREATE_ROUND
 } from "../../constants/graphql";
 
 export default {
@@ -33,36 +33,71 @@ export default {
       title: "New game",
       playersAdded: this.$store.state.playersAdded,
       players: this.$store.state.players,
-      gameSetup: this.$store.state.gameSetup
+      gameSetup: this.$store.state.gameSetup,
+      dealer: this.$store.state.dealer,
+      upAndDown: this.$store.state.upAndDown,
+      allDealOneCard: this.$store.state.allDealOneCard
     };
   },
   methods: {
     createNewGame() {
       this.$apollo
         .mutate({
-          mutation: CREATE_GAME_MUTATION
+          mutation: CREATE_GAME
         })
         .then(response => {
-          const gameId = response.data.createGame.id;
-          
-          this.players.forEach(player => {
-            this.$apollo.mutate({
-              mutation: ADD_PLAYER_TO_GAME,
-              variables: {
-                gameId,
-                playerId: player.id
-              }
-            });
-          });
+          const game = response.data.createGame;
+          this.$store.commit("setCurrentGame", game);
 
-          this.$apollo.mutate({
-            mutation: CREATE_GAME_CONFIGURATION_MUTATION,
-            variables: {
-              initialDealer: this.gameSetup.initialDealer,
-              allDealOneCard: this.gameSetup.allDealOneCard,
-              upAndDown: this.gameSetup.goingUpAndDown
-            }
-          });
+          const gameId = game.id;
+
+          this.addPlayersToGame(gameId);
+
+          this.createGameConfiguration(gameId);
+
+          this.createInitialRound(gameId);
+        });
+    },
+    addPlayersToGame(gameId) {
+      this.players.forEach(player => {
+        this.$apollo.mutate({
+          mutation: ADD_PLAYER_TO_GAME,
+          variables: {
+            gameId,
+            playerId: player.id
+          }
+        });
+      });
+    },
+    createGameConfiguration(gameId) {
+      this.$apollo.mutate({
+        mutation: CREATE_GAME_CONFIGURATION,
+        variables: {
+          gameId,
+          initialDealerId: this.dealer.id,
+          allDealOneCard: this.allDealOneCard,
+          upAndDown: this.goingUpAndDown
+        }
+      });
+    },
+    createInitialRound(gameId) {
+      this.$apollo
+        .mutate({
+          mutation: CREATE_ROUND,
+          variables: {
+            gameId
+          }
+        })
+        .then(response => {
+          const nextRound = {
+            id: response.data.createRound.id,
+            numCards: response.data.createRound.numCards
+          };
+
+          this.$store.commit("goToNextRound", nextRound);
+          // Routing has to be handled this way using a button since a router-link
+          // would not wait for the callback and the context won't be ready
+          this.$router.push("/game");
         });
     }
   }

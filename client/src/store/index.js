@@ -9,6 +9,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
+    currentGame: undefined,
     players: [],
     playersAdded: false,
     setup: {},
@@ -16,12 +17,15 @@ export default new Vuex.Store({
     upAndDown: true,
     allDealOneCard: false,
     dealer: undefined,
-    currentRound: 1,
-    numCards: 1,
+    currentRound: undefined,
     totalRounds: 0,
     rounds: []
   },
   mutations: {
+    setCurrentGame(state, game) {
+      state.currentGame = game;
+    },
+    
     addPlayer(state, player) {
       state.players.push(player);
     },
@@ -71,9 +75,8 @@ export default new Vuex.Store({
       state.rounds.push(round);
     },
 
-    goToNextRound(state) {
-      state.currentRound++;
-      state.numCards++; // TODO Check going down or several first and last rounds
+    goToNextRound(state, round) {
+      state.currentRound = round;
     },
 
     setupGame(state, configuration) {

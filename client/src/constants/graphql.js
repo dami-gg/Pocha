@@ -27,15 +27,18 @@ export const ALL_PLAYERS_QUERY = gql`
   }
 `;
 
-export const CREATE_GAME_MUTATION = gql`
+export const CREATE_GAME = gql`
   mutation CreateGameMutation {
     createGame {
       id
+      players {
+        id
+      }
     }
   }
 `;
 
-export const CREATE_PLAYER_MUTATION = gql`
+export const CREATE_PLAYER = gql`
   mutation CreatePlayerMutation($name: String!) {
     createPlayer(name: $name) {
       id
@@ -44,12 +47,16 @@ export const CREATE_PLAYER_MUTATION = gql`
   }
 `;
 
-export const CREATE_GAME_CONFIGURATION_MUTATION = gql`
+export const CREATE_GAME_CONFIGURATION = gql`
   mutation CreateGameConfigurationMutation(
+    $gameId: ID
+    $initialDealerId: ID
     $allDealOneCard: Boolean
     $upAndDown: Boolean
   ) {
     createGameConfiguration(
+      gameId: $gameId
+      initialDealerId: $initialDealerId
       allDealOneCard: $allDealOneCard
       upAndDown: $upAndDown
     ) {
@@ -58,21 +65,43 @@ export const CREATE_GAME_CONFIGURATION_MUTATION = gql`
   }
 `;
 
+export const CREATE_ROUND = gql`
+  mutation CreateRoundMutation($gameId: ID) {
+    createRound(gameId: $gameId) {
+      id
+      numCards
+      bets {
+        id
+      }
+      scores {
+        id
+      }
+    }
+  }
+`;
+
 export const ADD_PLAYER_TO_GAME = gql`
-  mutation AddPlayerToGameMutation($gameId: ID, $playerId: ID) {
+  mutation AddPlayerToGameMutation($gameId: ID!, $playerId: ID!) {
     addToPlayerGames(gamesGameId: $gameId, playersPlayerId: $playerId) {
       gamesGame {
-        id
-        createdAt
         players {
           id
         }
       }
       playersPlayer {
-        id
         games {
           id
         }
+      }
+    }
+  }
+`;
+
+export const ADD_ROUND_TO_GAME = gql`
+  mutation AddRoundToGame($gameId: ID, $roundId: ID) {
+    addToGameRounds(gameGameId: $gameId, roundsRoundId: $roundId) {
+      gameGame {
+        rounds
       }
     }
   }

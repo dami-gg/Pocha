@@ -1,8 +1,8 @@
 <template>
   <div class="round">
-    <h1>{{type === ROUND_TYPE_BET ? 'Bets' : 'Scores'}} for round of {{round.numCards}} cards dealt by {{this.dealer.name}}</h1>
+    <h1>{{type === ROUND_TYPE_BET ? 'Bets' : 'Scores'}} for round of {{this.currentRound.numCards}} cards dealt by {{this.dealer.name}}</h1>
     <div class="round__players">
-      <div class="round__players__player" v-for="player in this.round.players" v-bind:key="player.id">
+      <div class="round__players__player" v-for="player in this.currentGame.players" v-bind:key="player.id">
         <div class="round__players__name">{{player.name}}</div>
         <div class="round__players__inputs">
           <div class="round__players__bet">
@@ -21,42 +21,46 @@
 </template>
 
 <script>
-import ActionButtons from '../common/ActionButtons';
-import { ROUND_TYPE_BET, ROUND_TYPE_SCORE } from '../../constants';
-import { calculateScore } from '../../helpers';
+import ActionButtons from "../common/ActionButtons";
+import { ROUND_TYPE_BET, ROUND_TYPE_SCORE } from "../../constants";
+import { calculateScore } from "../../helpers";
 
 export default {
-  name: 'round',
-  props: ['numCards', 'type'],
+  name: "round",
+  props: ["type"], 
   components: {
     ActionButtons
   },
   data() {
     return {
+      currentGame: this.$store.state.currentGame,
       players: this.$store.state.players,
-      rounds: this.$store.state.rounds,
       dealer: this.$store.state.dealer,
       currentRound: this.$store.state.currentRound,
       ROUND_TYPE_BET,
       ROUND_TYPE_SCORE
-    }
+    };
   },
   methods: {
-    // TODO Validate form and disable button while requirement are not met (see isEverythingCorrect method below)    
+    // TODO Validate form and disable button while requirement are not met (see isEverythingCorrect method below)
     save() {
-      if (this.type === ROUND_TYPE_BET) {
-        this.$store.commit('addRoundBets', this.round);
-      }
-      else {
-        this.round.players.forEach(player => {
-          let score = calculateScore(player.bet, player.points);
-          player.score = score;
-          player.accumulatedScore += score;
-        });
-
-        this.$store.commit('addRoundScores', this.round);
-      }
+      this.type === ROUND_TYPE_BET ? this.saveBets() : this.saveScores();
       this.redirectToGame();
+    },
+
+    saveBets() {      
+      
+      this.$store.commit("addRoundBets", this.round);
+    },
+
+    saveScores() {
+      this.round.players.forEach(player => {
+        let score = calculateScore(player.bet, player.points);
+        player.score = score;
+        player.accumulatedScore += score;
+      });
+
+      this.$store.commit("addRoundScores", this.round);
     },
 
     cancel() {
@@ -64,31 +68,14 @@ export default {
     },
 
     redirectToGame() {
-      this.$router.push('/game');
-    },
-
-    initializeRound() {
-      let round = {
-        id: this.currentRound,
-        numCards: this.numCards,
-        players: [],
-        dealer: this.dealer
-      };
-
-      this.addPlayersSortedToRound(round);
-
-      return round;
-    },
-
-    getRound() {
-      let totalRounds = this.rounds.length;
-
-      return this.rounds[totalRounds - 1];
+      this.$router.push("/game");
     },
 
     addPlayersSortedToRound(round) {
       // Sort players depending on who's the dealer, being this the last one
-      const dealerIndex = this.players.findIndex(player => this.dealer.id === player.id);
+      const dealerIndex = this.players.findIndex(
+        player => this.dealer.id === player.id
+      );
       const totalPlayers = this.players.length;
 
       for (let i = dealerIndex + 1; i < totalPlayers; i++) {
@@ -98,6 +85,8 @@ export default {
       for (let i = 0; i <= dealerIndex; i++) {
         this.addPlayerToRound(round, this.players[i]);
       }
+
+      return round;
     },
 
     addPlayerToRound(round, player) {
@@ -108,13 +97,13 @@ export default {
         points: undefined,
         score: undefined,
         accumulatedScore: player.accumulatedScore
-      })
+      });
     },
 
     isEverythingCorrect() {
       return this.type === ROUND_TYPE_BET
-        ? this.areAllValuesAdded('bet') && this.areBetsDifferentThanTotalCards()
-        : this.areAllValuesAdded('score');
+        ? this.areAllValuesAdded("bet") && this.areBetsDifferentThanTotalCards()
+        : this.areAllValuesAdded("score");
     },
 
     areAllValuesAdded(valueType) {
@@ -123,7 +112,9 @@ export default {
       }
 
       let allAdded = true;
-      this.round.players.forEach(player => allAdded = allAdded && !!player[valueType]);
+      this.round.players.forEach(
+        player => (allAdded = allAdded && !!player[valueType])
+      );
 
       return allAdded;
     },
@@ -141,15 +132,10 @@ export default {
         totalBets += player.bet;
       });
 
-      return totalBets !== this.numCards;
+      return totalBets !== this.currentRound.numCards;
     }
-  },
-  computed: {
-    round() {
-      return this.type === ROUND_TYPE_BET ? this.initializeRound() : this.getRound();
-    }
-  },
-}
+  }
+};
 </script>
 
 <style scope>

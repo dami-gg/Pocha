@@ -39,7 +39,7 @@ export default new Router({
       component: Game
     },
     {
-      path: "/round/:numCards/:type",
+      path: "/round/:type",
       props: true,
       name: "round",
       component: Round
